@@ -12,6 +12,9 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Temporary in-memory "database"
+  const [users, setUsers] = useState([]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError(""); // Clear error on typing
@@ -20,8 +23,11 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!form.email.trim() || !form.password.trim() || (mode === "register" && !form.username.trim())) {
+    if (
+      !form.email.trim() ||
+      !form.password.trim() ||
+      (mode === "register" && !form.username.trim())
+    ) {
       setError("Please fill in all required fields, duh.");
       return;
     }
@@ -30,15 +36,32 @@ export default function Login() {
     setError("");
 
     setTimeout(() => {
-      if (mode === "login") {
-        console.log("Login data:", form);
-        setLoading(false);
-        navigate("/loginpage"); // Redirect to main App page after login
-      } else {
-        console.log("Register data:", form);
+      if (mode === "register") {
+        // Check if email already registered
+        const emailExists = users.some((u) => u.email === form.email);
+        if (emailExists) {
+          setError("Email already registered. Try logging in.");
+          setLoading(false);
+          return;
+        }
+        // Register new user
+        setUsers([...users, { ...form }]);
         setLoading(false);
         setMode("login");
         setForm({ email: "", password: "", username: "" });
+        alert("Registered! Now login, cutie.");
+      } else {
+        // Login: check if email & password match a user in db
+        const user = users.find(
+          (u) => u.email === form.email && u.password === form.password
+        );
+        if (user) {
+          setLoading(false);
+          navigate("/loginpage"); // Successful login redirect
+        } else {
+          setError("Invalid email or password. Try again.");
+          setLoading(false);
+        }
       }
     }, 1000);
   };
@@ -92,7 +115,11 @@ export default function Login() {
               loading ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-700"
             }`}
           >
-            {loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}
+            {loading
+              ? "Please wait..."
+              : mode === "login"
+              ? "Login"
+              : "Register"}
           </button>
         </form>
 
