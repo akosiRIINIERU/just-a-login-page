@@ -49,15 +49,15 @@ export default function Login() {
         setLoading(false);
         setMode("login");
         setForm({ email: "", password: "", username: "" });
-        alert("Registered! Now login, cutie.");
+        alert("Naka Register naka,sulod na cutiepie sugarplum ko.");
       } else {
-        // Login: check if email & password match a user in db
+        
         const user = users.find(
           (u) => u.email === form.email && u.password === form.password
         );
         if (user) {
           setLoading(false);
-          navigate("/loginpage"); // Successful login redirect
+          navigate("/loginpage"); 
         } else {
           setError("Invalid email or password. Try again.");
           setLoading(false);
