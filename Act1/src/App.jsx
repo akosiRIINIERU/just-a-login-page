@@ -37,14 +37,14 @@ export default function Login() {
 
     setTimeout(() => {
       if (mode === "register") {
-        // Check if email already registered
+    
         const emailExists = users.some((u) => u.email === form.email);
         if (emailExists) {
-          setError("Email already registered. Try logging in.");
+          setError("Na register namani na email dol, try ug lain.");
           setLoading(false);
           return;
         }
-        // Register new user
+
         setUsers([...users, { ...form }]);
         setLoading(false);
         setMode("login");
@@ -59,7 +59,7 @@ export default function Login() {
           setLoading(false);
           navigate("/loginpage"); 
         } else {
-          setError("Invalid email or password. Try again.");
+          setError("Pagtarong ug sulod sa imong credentials, dol, aglamalama kaman maypag register na nimo, naa ang link sa comment section.");
           setLoading(false);
         }
       }
@@ -70,7 +70,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-[350px]">
         <h1 className="text-2xl font-bold text-center mb-6">
-          {mode === "login" ? "Welcome back" : "Create account"}
+          {mode === "login" ? "Balik man ka dol?" : "Create sa kol"}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -124,7 +124,7 @@ export default function Login() {
         </form>
 
         <p className="text-center text-sm mt-4">
-          {mode === "login" ? "No account?" : "Already have an account?"}
+          {mode === "login na lo" ? "Wakay account loy?" : "wabakay acc or naa nakay account?"}
           <button
             onClick={() => {
               if (loading) return;
